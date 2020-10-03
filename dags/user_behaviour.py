@@ -22,8 +22,8 @@ movie_clean_emr_steps = './dags/scripts/emr/clean_movie_review.json'
 movie_text_classification_script = './dags/scripts/spark/random_text_classification.py'
 
 # remote config
-BUCKET_NAME = '<your-s3-bucket>'
-EMR_ID = '<your-emr-id>'
+BUCKET_NAME = 'data-eng-bucket'
+EMR_ID = 'j-99WV1JCR64ED'
 temp_filtered_user_purchase_key= 'user_purchase/stage/{{ ds }}/temp_filtered_user_purchase.csv'
 movie_review_load = 'movie_review/load/movie.csv'
 movie_review_load_folder = 'movie_review/load/'
@@ -90,7 +90,7 @@ user_purchase_to_s3_stage = PythonOperator(
         'key': temp_filtered_user_purchase_key,
     },
 )
-
+# After S3 is loaded up, we remove it from our local temp
 remove_local_user_purchase_file = PythonOperator(
     dag=dag,
     task_id='remove_local_user_purchase_file',
