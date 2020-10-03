@@ -34,7 +34,7 @@ get_user_behaviour = 'scripts/sql/get_user_behavior_metrics.sql'
 # helper function(s)
 
 def _local_to_s3(filename, key, bucket_name=BUCKET_NAME):
-    s3 = S3Hook()
+    s3 = S3Hook(conn_id='aws_default')
     s3.load_file(filename=filename, bucket_name=bucket_name,
                  replace=True, key=key)
 

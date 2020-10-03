@@ -1,0 +1,53 @@
+*** Reading local file: /usr/local/airflow/logs/user_behaviour/user_purchase_to_s3_stage/2010-12-01T00:00:00+00:00/1.log
+[2020-10-03 06:50:29,863] {{taskinstance.py:655}} INFO - Dependencies all met for <TaskInstance: user_behaviour.user_purchase_to_s3_stage 2010-12-01T00:00:00+00:00 [queued]>
+[2020-10-03 06:50:29,885] {{taskinstance.py:655}} INFO - Dependencies all met for <TaskInstance: user_behaviour.user_purchase_to_s3_stage 2010-12-01T00:00:00+00:00 [queued]>
+[2020-10-03 06:50:29,885] {{taskinstance.py:866}} INFO - 
+--------------------------------------------------------------------------------
+[2020-10-03 06:50:29,885] {{taskinstance.py:867}} INFO - Starting attempt 1 of 2
+[2020-10-03 06:50:29,885] {{taskinstance.py:868}} INFO - 
+--------------------------------------------------------------------------------
+[2020-10-03 06:50:29,898] {{taskinstance.py:887}} INFO - Executing <Task(PythonOperator): user_purchase_to_s3_stage> on 2010-12-01T00:00:00+00:00
+[2020-10-03 06:50:29,901] {{standard_task_runner.py:53}} INFO - Started process 22621 to run task
+[2020-10-03 06:50:29,955] {{logging_mixin.py:112}} INFO - Running %s on host %s <TaskInstance: user_behaviour.user_purchase_to_s3_stage 2010-12-01T00:00:00+00:00 [running]> d00c0533a899
+[2020-10-03 06:50:30,001] {{logging_mixin.py:112}} INFO - [2020-10-03 06:50:30,000] {{credentials.py:1032}} INFO - Found credentials in shared credentials file: /usr/local/airflow/.aws/credentials
+[2020-10-03 06:50:30,462] {{taskinstance.py:1128}} ERROR - Failed to upload /temp/temp_filtered_user_purchase.csv to data-eng-bucket/user_purchase/stage/2010-12-01/temp_filtered_user_purchase.csv: An error occurred (InvalidAccessKeyId) when calling the PutObject operation: The AWS Access Key Id you provided does not exist in our records.
+Traceback (most recent call last):
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/boto3/s3/transfer.py", line 279, in upload_file
+    future.result()
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/s3transfer/futures.py", line 73, in result
+    return self._coordinator.result()
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/s3transfer/futures.py", line 233, in result
+    raise self._exception
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/s3transfer/tasks.py", line 126, in __call__
+    return self._execute_main(kwargs)
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/s3transfer/tasks.py", line 150, in _execute_main
+    return_value = self._main(**kwargs)
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/s3transfer/upload.py", line 692, in _main
+    client.put_object(Bucket=bucket, Key=key, Body=body, **extra_args)
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 314, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 612, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (InvalidAccessKeyId) when calling the PutObject operation: The AWS Access Key Id you provided does not exist in our records.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 966, in _run_raw_task
+    result = task_copy.execute(context=context)
+  File "/usr/local/lib/python3.7/site-packages/airflow/operators/python_operator.py", line 113, in execute
+    return_value = self.execute_callable()
+  File "/usr/local/lib/python3.7/site-packages/airflow/operators/python_operator.py", line 118, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/usr/local/airflow/dags/user_behaviour.py", line 39, in _local_to_s3
+    replace=True, key=key)
+  File "/usr/local/lib/python3.7/site-packages/airflow/hooks/S3_hook.py", line 350, in load_file
+    client.upload_file(filename, bucket_name, key, ExtraArgs=extra_args)
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/boto3/s3/inject.py", line 131, in upload_file
+    extra_args=ExtraArgs, callback=Callback)
+  File "/usr/local/airflow/.local/lib/python3.7/site-packages/boto3/s3/transfer.py", line 287, in upload_file
+    filename, '/'.join([bucket, key]), e))
+boto3.exceptions.S3UploadFailedError: Failed to upload /temp/temp_filtered_user_purchase.csv to data-eng-bucket/user_purchase/stage/2010-12-01/temp_filtered_user_purchase.csv: An error occurred (InvalidAccessKeyId) when calling the PutObject operation: The AWS Access Key Id you provided does not exist in our records.
+[2020-10-03 06:50:30,469] {{taskinstance.py:1151}} INFO - Marking task as UP_FOR_RETRY
+[2020-10-03 06:50:39,851] {{logging_mixin.py:112}} INFO - [2020-10-03 06:50:39,850] {{local_task_job.py:103}} INFO - Task exited with return code 1
+
