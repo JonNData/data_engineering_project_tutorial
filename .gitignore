@@ -5,6 +5,8 @@
 Session.vim
 .netrwhist
 *~
+# Keys
+*.ppk
 
 ### SublimeText ###
 # cache files for sublime text
