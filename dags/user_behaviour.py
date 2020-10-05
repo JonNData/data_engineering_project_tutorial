@@ -17,13 +17,13 @@ import psycopg2
 # local
 unload_user_purchase ='./scripts/sql/filter_unload_user_purchase.sql'
 temp_filtered_user_purchase = '/temp/temp_filtered_user_purchase.csv'
-movie_review_local = '/data/movie_review/movie_review.csv'
+movie_review_local = '/data/movie_review/movie_review.csv' # this is within Docker file system
 movie_clean_emr_steps = './dags/scripts/emr/clean_movie_review.json'
 movie_text_classification_script = './dags/scripts/spark/random_text_classification.py'
 
 # remote config
 BUCKET_NAME = 'data-eng-bucket'
-EMR_ID = 'j-99WV1JCR64ED'
+EMR_ID = 'j-2T4T4UXZXC894'
 temp_filtered_user_purchase_key= 'user_purchase/stage/{{ ds }}/temp_filtered_user_purchase.csv'
 movie_review_load = 'movie_review/load/movie.csv'
 movie_review_load_folder = 'movie_review/load/'
@@ -34,8 +34,8 @@ get_user_behaviour = 'scripts/sql/get_user_behavior_metrics.sql'
 # helper function(s)
 
 def _local_to_s3(filename, key, bucket_name=BUCKET_NAME):
-    s3 = S3Hook(conn_id='aws_default')
-    s3.load_file(filename=filename, bucket_name=bucket_name,
+    s3 = S3Hook()
+    s3.load_file(filename=filename, bucket_name=BUCKET_NAME,
                  replace=True, key=key)
 
 def remove_local_file(filelocation):
@@ -157,7 +157,7 @@ user_purchase_to_rs_stage = PythonOperator(
     python_callable=run_redshift_external_query,
     op_kwargs={
         'qry': "alter table spectrum.user_purchase_staging add partition(insert_date='{{ ds }}') \
-            location 's3://<your-s3-bucket>/user_purchase/stage/{{ ds }}'",
+           location 's3://data-eng-bucket/user_purchase/stage/{{ ds }}'",
     },
 )
 
