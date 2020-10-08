@@ -167,7 +167,9 @@ get_user_behaviour = PostgresOperator(
     sql=get_user_behaviour,
     postgres_conn_id='redshift'
 )
-
+# Current ideas, play around with instance billing model-- EMR not deploying
+# start everything fresh, remember you need to 
+# update all bucket, redshift, emr names as well as connections in airflow
 pg_unload >> user_purchase_to_s3_stage >> remove_local_user_purchase_file >> user_purchase_to_rs_stage
 [movie_review_to_s3_stage, move_emr_script_to_s3] >> add_emr_steps >> clean_movie_review_data
 [user_purchase_to_rs_stage, clean_movie_review_data] >> get_user_behaviour >> end_of_data_pipeline
